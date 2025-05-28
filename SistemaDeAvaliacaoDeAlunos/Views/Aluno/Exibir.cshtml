@@ -1,0 +1,21 @@
+﻿<h3>Notas</h3>
+<table class="table">
+    <tr>
+        <th>Disciplina</th>
+        <th>Nota</th>
+    </tr>
+    @foreach (var nota in Model.Notas)
+    {
+        <tr>
+            <td>@nota.Disciplina.Nome</td>
+            <td>@nota.Valor</td>
+        </tr>
+    }
+</table>
+
+<p><strong>Média:</strong> @Model.CalcularMedia()</p>
+<p><strong>Status:</strong> @Model.Status</p>
+
+<p>
+    @Html.ActionLink("Adicionar Nota", "AdicionarNota", new { id = ViewBag.Id })
+</p>
