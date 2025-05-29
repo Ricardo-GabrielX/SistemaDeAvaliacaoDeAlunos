@@ -26,21 +26,8 @@ namespace WebApplication1.Models
         public DateTime Data { get; set; }
 
         public List<Nota> Notas { get; set; } = new List<Nota>();
+        public string Status { get; set; }
 
-        //[NotMapped]
-        //public string Disciplina1 { get; set; }
-        //[NotMapped]
-        //public double? Nota1 { get; set; }
-
-        //[NotMapped]
-        //public string Disciplina2 { get; set; }
-        //[NotMapped]
-        //public double? Nota2 { get; set; }
-
-        //[NotMapped]
-        //public string Disciplina3 { get; set; }
-        //[NotMapped]
-        //public double? Nota3 { get; set; }
 
         public static void GerarLista(HttpSessionStateBase session)
         {
@@ -140,32 +127,44 @@ namespace WebApplication1.Models
 
         public void Editar(HttpSessionStateBase session, int id)
         {
-            if (session["ListaAluno"] != null)
+            var lista = session["ListaAluno"] as List<Aluno>;
+            var aluno = lista.FirstOrDefault(a => a.Id == id);
+
+            if (aluno != null)
             {
-                var aluno = Aluno.Procurar(session, id);
                 aluno.Nome = this.Nome;
                 aluno.RA = this.RA;
                 aluno.Data = this.Data;
+
+                var disciplinas = Disciplina.DisciplinasFixas;
+
+                for (int i = 0; i < aluno.Notas.Count; i++)
+                {
+                    aluno.Notas[i].Bimestre1 = this.Notas[i].Bimestre1;
+                    aluno.Notas[i].Bimestre2 = this.Notas[i].Bimestre2;
+                    aluno.Notas[i].Bimestre3 = this.Notas[i].Bimestre3;
+                    aluno.Notas[i].Bimestre4 = this.Notas[i].Bimestre4;
+                    aluno.Notas[i].Disciplina = disciplinas[i];
+                }
+
+                aluno.AtualizarStatus();
             }
+
+            session["ListaAluno"] = lista;
         }
-        
+
 
         public double CalcularMedia()
         {
-            if (Notas == null || Notas.Count == 0)
-                return 0;
-
-            return Notas.Average(n => n.Valor);
+            return Notas.Any() ? Notas.Average(n => n.Media) : 0.0;
         }
 
-        public string Status
+        public void AtualizarStatus()
         {
-            get
-            {
-                var media = CalcularMedia();
-                return media >= 6 ? "Aprovado" : "Reprovado";
-            }
+            double mediaGeral = CalcularMedia();
+            Status = mediaGeral >= 6.0 ? "Aprovado" : "Reprovado";
         }
+
 
 
     }

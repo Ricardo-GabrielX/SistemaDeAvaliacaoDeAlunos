@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Drawing;
 using System.Xml.Linq;
+using SistemaDeAvaliacaoDeAlunos.Models;
 
 
 namespace WebApplication1.Controllers
@@ -79,29 +80,27 @@ namespace WebApplication1.Controllers
         }
         public ActionResult Editar(int id)
         {
-            return View(Aluno.Procurar(Session, id));
+            var aluno = Aluno.Procurar(Session, id);
+
+            var disciplinas = Disciplina.DisciplinasFixas;
+            for (int i = 0; i < aluno.Notas.Count; i++)
+            {
+                aluno.Notas[i].Disciplina = disciplinas[i];
+            }
+
+            return View(aluno);
         }
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Editar(Aluno aluno)
+        public ActionResult Editar(int id, Aluno aluno)
         {
             if (ModelState.IsValid)
             {
-                var existente = Aluno.Procurar(Session, aluno.Id);
-                if (existente != null)
-                {
-                    existente.Nome = aluno.Nome;
-                    existente.RA = aluno.RA;
-                    existente.Data = aluno.Data;
-
-                    for (int i = 0; i < existente.Notas.Count; i++)
-                    {
-                        existente.Notas[i].Valor = aluno.Notas[i].Valor;
-                    }
-
-                    return RedirectToAction("Listar");
-                }
+                aluno.Editar(Session, id);
+                return RedirectToAction("Listar");
             }
 
             return View(aluno);

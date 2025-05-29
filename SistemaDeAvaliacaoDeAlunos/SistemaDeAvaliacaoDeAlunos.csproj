@@ -164,6 +164,7 @@
     <Compile Include="Models\Aluno.cs" />
     <Compile Include="Models\Disciplina.cs" />
     <Compile Include="Models\Nota.cs" />
+    <Compile Include="Models\Repositorio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

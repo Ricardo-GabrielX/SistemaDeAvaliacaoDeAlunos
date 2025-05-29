@@ -1,21 +1,40 @@
 ﻿<h3>Notas</h3>
-<table class="table">
-    <tr>
-        <th>Disciplina</th>
-        <th>Nota</th>
-    </tr>
-    @foreach (var nota in Model.Notas)
-    {
+
+<table class="table table-bordered table-striped table-hover">
+    <thead class="thead-dark">
         <tr>
-            <td>@nota.Disciplina.Nome</td>
-            <td>@nota.Valor</td>
+            <th>Disciplina</th>
+            <th>Bimestre 1</th>
+            <th>Bimestre 2</th>
+            <th>Bimestre 3</th>
+            <th>Bimestre 4</th>
+            <th>Média</th>
         </tr>
-    }
+    </thead>
+    <tbody>
+        @foreach (var nota in Model.Notas)
+        {
+            <tr>
+                <td><strong>@nota.Disciplina.Nome</strong></td>
+                <td>@nota.Bimestre1</td>
+                <td>@nota.Bimestre2</td>
+                <td>@nota.Bimestre3</td>
+                <td>@nota.Bimestre4</td>
+                <td>
+                    <span class="badge @(nota.Media >= 6 ? "bg-success" : "bg-danger")">
+                        @nota.Media.ToString("F2")
+                    </span>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
 
-<p><strong>Média:</strong> @Model.CalcularMedia()</p>
-<p><strong>Status:</strong> @Model.Status</p>
+<div class="alert @(Model.CalcularMedia() >= 6 ? "alert-success" : "alert-danger")" role="alert">
+    <strong>Média Geral:</strong> @Model.CalcularMedia().ToString("F2")<br />
+    <strong>Status:</strong> @Model.Status
+</div>
 
 <p>
-    @Html.ActionLink("Adicionar Nota", "AdicionarNota", new { id = ViewBag.Id })
+    @Html.ActionLink("Editar informações", "Edit", new { id = ViewBag.Id }, new { @class = "btn btn-primary" })
 </p>
