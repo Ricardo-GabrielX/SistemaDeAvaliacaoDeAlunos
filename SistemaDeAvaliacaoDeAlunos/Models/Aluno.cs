@@ -52,37 +52,51 @@ namespace WebApplication1.Models
                 }
             }
 
-            var lista = new List<Aluno>();
-            lista.Add(new Aluno { Id = 1, Nome = "Lucas Martins", RA = "78945612301", Data = new DateTime(2025, 03, 01) });
-            lista.Add(new Aluno { Id = 2, Nome = "Mariana Souza", RA = "12378945602", Data = new DateTime(2025, 03, 02) });
-            lista.Add(new Aluno { Id = 3, Nome = "Carlos Eduardo", RA = "45612378903", Data = new DateTime(2025, 03, 03) });
-            lista.Add(new Aluno { Id = 4, Nome = "Fernanda Lima", RA = "98765432104", Data = new DateTime(2025, 03, 04) });
-            lista.Add(new Aluno { Id = 5, Nome = "João Pedro", RA = "32198765405", Data = new DateTime(2025, 03, 05) });
-            lista.Add(new Aluno { Id = 6, Nome = "Ana Clara", RA = "65432198706", Data = new DateTime(2025, 03, 06) });
-            lista.Add(new Aluno { Id = 7, Nome = "Rafael Silva", RA = "25836914707", Data = new DateTime(2025, 03, 07) });
-            lista.Add(new Aluno { Id = 8, Nome = "Beatriz Costa", RA = "14725836908", Data = new DateTime(2025, 03, 08) });
-            lista.Add(new Aluno { Id = 9, Nome = "Henrique Oliveira", RA = "36914725809", Data = new DateTime(2025, 03, 09) });
-            lista.Add(new Aluno { Id = 10, Nome = "Camila Ribeiro", RA = "85274196310", Data = new DateTime(2025, 03, 10) });
+            var disciplinasFixas = Disciplina.DisciplinasFixas;
 
-            lista.Add(new Aluno { Id = 11, Nome = "Mateus Rocha", RA = "74185296311", Data = new DateTime(2025, 03, 11) });
-            lista.Add(new Aluno { Id = 12, Nome = "Juliana Freitas", RA = "96374185212", Data = new DateTime(2025, 03, 12) });
-            lista.Add(new Aluno { Id = 13, Nome = "Thiago Fernandes", RA = "25896314713", Data = new DateTime(2025, 03, 13) });
-            lista.Add(new Aluno { Id = 14, Nome = "Patrícia Mendes", RA = "14785236914", Data = new DateTime(2025, 03, 14) });
-            lista.Add(new Aluno { Id = 15, Nome = "Diego Barros", RA = "36974125815", Data = new DateTime(2025, 03, 15) });
-            lista.Add(new Aluno { Id = 16, Nome = "Larissa Teixeira", RA = "85214796316", Data = new DateTime(2025, 03, 16) });
-            lista.Add(new Aluno { Id = 17, Nome = "André Almeida", RA = "74196385217", Data = new DateTime(2025, 03, 17) });
-            lista.Add(new Aluno { Id = 18, Nome = "Natália Castro", RA = "96325874118", Data = new DateTime(2025, 03, 18) });
-            lista.Add(new Aluno { Id = 19, Nome = "Vinícius Gomes", RA = "25814796319", Data = new DateTime(2025, 03, 19) });
-            lista.Add(new Aluno { Id = 20, Nome = "Gabriela Dias", RA = "14736985220", Data = new DateTime(2025, 03, 20) });
+            var lista = new List<Aluno>
+            {
+                new Aluno { Id = 1, Nome = "Lucas Martins", RA = "78945612301", Data = new DateTime(2025, 03, 01) },
+                new Aluno { Id = 2, Nome = "Mariana Souza", RA = "12378945602", Data = new DateTime(2025, 03, 02) },
+                new Aluno { Id = 3, Nome = "Carlos Eduardo", RA = "45612378903", Data = new DateTime(2025, 03, 03) },
+                new Aluno { Id = 4, Nome = "Fernanda Lima", RA = "98765432104", Data = new DateTime(2025, 03, 04) },
+                new Aluno { Id = 5, Nome = "João Pedro", RA = "32198765405", Data = new DateTime(2025, 03, 05) },
+                new Aluno { Id = 6, Nome = "Ana Clara", RA = "65432198706", Data = new DateTime(2025, 03, 06) },
+                new Aluno { Id = 7, Nome = "Rafael Silva", RA = "25836914707", Data = new DateTime(2025, 03, 07) },
+                new Aluno { Id = 8, Nome = "Beatriz Costa", RA = "14725836908", Data = new DateTime(2025, 03, 08) },
+                new Aluno { Id = 9, Nome = "Henrique Oliveira", RA = "36914725809", Data = new DateTime(2025, 03, 09) },
+                new Aluno { Id = 10, Nome = "Camila Ribeiro", RA = "85274196310", Data = new DateTime(2025, 03, 10) }
+            };
 
-            lista.Add(new Aluno { Id = 21, Nome = "Fábio Nogueira", RA = "36985274121", Data = new DateTime(2025, 03, 21) });
-            lista.Add(new Aluno { Id = 22, Nome = "Débora Batista", RA = "85274196322", Data = new DateTime(2025, 03, 22) });
-            lista.Add(new Aluno { Id = 23, Nome = "Leonardo Pinto", RA = "74196385223", Data = new DateTime(2025, 03, 23) });
-            lista.Add(new Aluno { Id = 24, Nome = "Isabela Martins", RA = "96325874124", Data = new DateTime(2025, 03, 24) });
-            lista.Add(new Aluno { Id = 25, Nome = "Pedro Henrique", RA = "25814796325", Data = new DateTime(2025, 03, 25) });
+            foreach (var aluno in lista)
+            {
+                aluno.Notas = new List<Nota>();
 
-            session.Remove("ListaAluno");
-            session.Add("ListaAluno", lista);
+                foreach (var disciplina in disciplinasFixas)
+                {
+                    double valorNota = 0;
+
+                    if (aluno.Id == 1)
+                        valorNota = disciplina.Nome == "Matemática" ? 8 : 7;
+
+                    else if (aluno.Id == 2)
+                        valorNota = disciplina.Nome == "Português" ? 5 : 6.5;
+
+                    else if (aluno.Id == 3) 
+                        valorNota = 4;
+
+                    aluno.Notas.Add(new Nota
+                    {
+                        Disciplina = disciplina,
+                        Valor = valorNota
+                    });
+                }
+            }
+
+            //session.Remove("ListaAluno");
+            //session.Add("ListaAluno", lista);
+
+            session["ListaAluno"] = lista;
         }
 
         public void Adicionar(HttpSessionStateBase session)
@@ -155,4 +169,4 @@ namespace WebApplication1.Models
 
 
     }
-}
+}   

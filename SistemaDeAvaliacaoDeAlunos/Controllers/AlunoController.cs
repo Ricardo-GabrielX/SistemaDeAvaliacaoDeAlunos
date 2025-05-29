@@ -84,11 +84,27 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Editar(int id, Aluno aluno)
+        public ActionResult Editar(Aluno aluno)
         {
-            aluno.Editar(Session, id);
+            if (ModelState.IsValid)
+            {
+                var existente = Aluno.Procurar(Session, aluno.Id);
+                if (existente != null)
+                {
+                    existente.Nome = aluno.Nome;
+                    existente.RA = aluno.RA;
+                    existente.Data = aluno.Data;
 
-            return RedirectToAction("Listar");
+                    for (int i = 0; i < existente.Notas.Count; i++)
+                    {
+                        existente.Notas[i].Valor = aluno.Notas[i].Valor;
+                    }
+
+                    return RedirectToAction("Listar");
+                }
+            }
+
+            return View(aluno);
         }
 
         public ActionResult AdicionarNota(int id)

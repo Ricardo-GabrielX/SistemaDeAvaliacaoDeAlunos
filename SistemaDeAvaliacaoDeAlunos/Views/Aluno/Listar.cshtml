@@ -4,6 +4,8 @@
     ViewBag.Title = "Listar";
 }
 
+
+
 <h2>Listar</h2>
 
 <p>
@@ -24,33 +26,59 @@
             @Html.DisplayNameFor(model => model.Status)
         </th>
         @*<th>
-            @Html.DisplayNameFor(model => model.Disciplina1)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Disciplina2)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Disciplina3)
-        </th>*@
+                @Html.DisplayNameFor(model => model.Disciplina1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Disciplina2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Disciplina3)
+            </th>*@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nome)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RA)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Data)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RA)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Data)
+            </td>
+            <td>
+                @{
+                    var status = item.Status;
+                    var cor = status == "Aprovado" ? "#4CAF50" : "#F44336"; 
+                    var corFundo = status == "Aprovado" ? "rgba(76, 175, 80, 0.1)" : "rgba(244, 67, 54, 0.1)";
+                }
 
-        @*<td>
+                <span style="
+                display: inline-flex;
+                align-items: center;
+                padding: 4px 10px;
+                border-radius: 20px;
+                background-color: @corFundo;
+                color: @cor;
+                font-weight: 600;
+                font-size: 14px;
+                ">
+                <span style="
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background-color: @cor;
+                margin-right: 6px;
+                "></span>
+
+                @status
+                </span>
+            </td>
+
+            @*<td>
             @Html.DisplayFor(modelItem => item.Disciplina1)
         </td>
         <td>
@@ -59,12 +87,12 @@
         <td>
             @Html.DisplayFor(modelItem => item.Disciplina3)
         </td>*@
-        <td>
-            @Html.ActionLink("Edit", "Editar", new { id = item.Id }) |
-            @Html.ActionLink("Details", "Exibir", new { id = item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-        </td>
-    </tr>
-}
+            <td>
+                @Html.ActionLink("Editar", "Editar", new { id = item.Id }) |
+                @Html.ActionLink("Exibir", "Exibir", new { id = item.Id }) |
+                @Html.ActionLink("Excluir", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
 
 </table>
