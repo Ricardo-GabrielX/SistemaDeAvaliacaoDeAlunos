@@ -39,12 +39,31 @@
     </div>
 
     <h4>Notas</h4>
+
     @for (int i = 0; i < Model.Notas.Count; i++)
     {
         <div class="form-group">
             <label>@Model.Notas[i].Disciplina.Nome</label>
             @Html.Hidden($"Notas[{i}].Disciplina.Nome", Model.Notas[i].Disciplina.Nome)
-            @Html.TextBox($"Notas[{i}].Valor", Model.Notas[i].Valor, new { @class = "form-control" })
+
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.Label($"Notas[{i}].Bimestre1", "1º Bim")
+                    @Html.TextBox($"Notas[{i}].Bimestre1", Model.Notas[i].Bimestre1, new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    @Html.Label($"Notas[{i}].Bimestre2", "2º Bim")
+                    @Html.TextBox($"Notas[{i}].Bimestre2", Model.Notas[i].Bimestre2, new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    @Html.Label($"Notas[{i}].Bimestre3", "3º Bim")
+                    @Html.TextBox($"Notas[{i}].Bimestre3", Model.Notas[i].Bimestre3, new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    @Html.Label($"Notas[{i}].Bimestre4", "4º Bim")
+                    @Html.TextBox($"Notas[{i}].Bimestre4", Model.Notas[i].Bimestre4, new { @class = "form-control" })
+                </div>
+            </div>
         </div>
     }
 

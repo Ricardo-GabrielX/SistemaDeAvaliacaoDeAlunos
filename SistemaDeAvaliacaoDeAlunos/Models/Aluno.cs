@@ -162,7 +162,7 @@ namespace WebApplication1.Models
         public void AtualizarStatus()
         {
             double mediaGeral = CalcularMedia();
-            Status = mediaGeral >= 6.0 ? "Aprovado" : "Reprovado";
+            Status = mediaGeral >= 5.0 ? "Aprovado" : "Reprovado";
         }
 
 

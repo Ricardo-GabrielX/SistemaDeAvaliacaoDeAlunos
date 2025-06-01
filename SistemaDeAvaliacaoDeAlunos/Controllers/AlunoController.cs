@@ -74,6 +74,14 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Aluno aluno)
         {
+            var disciplinas = Disciplina.DisciplinasFixas;
+            for (int i = 0; i < aluno.Notas.Count; i++)
+            {
+                aluno.Notas[i].Disciplina = disciplinas[i];
+            }
+
+            aluno.AtualizarStatus();
+
             aluno.Adicionar(Session);
 
             return RedirectToAction("Listar");
