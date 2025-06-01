@@ -78,10 +78,8 @@ namespace WebApplication1.Models
                         Valor = valorNota
                     });
                 }
+                aluno.AtualizarStatus();
             }
-
-            //session.Remove("ListaAluno");
-            //session.Add("ListaAluno", lista);
 
             session["ListaAluno"] = lista;
         }
@@ -101,6 +99,8 @@ namespace WebApplication1.Models
                     Valor = 0
                 }).ToList();
             }
+
+            this.AtualizarStatus();
 
             lista.Add(this);
             session["ListaAluno"] = lista;
