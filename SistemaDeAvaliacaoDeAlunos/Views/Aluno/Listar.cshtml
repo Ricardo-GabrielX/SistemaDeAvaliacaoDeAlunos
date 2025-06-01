@@ -1,80 +1,82 @@
 ﻿@model IEnumerable<WebApplication1.Models.Aluno>
-
 @{
-    ViewBag.Title = "Listar";
+    ViewBag.Title = "Listar Alunos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
+<div class="page-container">
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                <h1 class="header-title">📚 Lista de Alunos</h1>
+                <div class="action-buttons">
+                    @Html.ActionLink("📄 Exportar PDF", "GerarPdf", null, new { @class = "btn btn-danger", title = "Exportar como PDF" })
+                    @Html.ActionLink("📊 Exportar Excel", "GerarExcel", null, new { @class = "btn btn-success", title = "Exportar como Excel" })
+                    @Html.ActionLink("➕ Novo Aluno", "Create", null, new { @class = "btn btn-primary", title = "Cadastrar novo aluno" })
+                </div>
+            </div>
 
-<h2>Listar</h2>
+            <div class="clean-card p-0">
+                <div class="table-responsive">
+                    <table class="table modern-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>👤 Nome Completo</th>
+                                <th>🆔 Registro Acadêmico</th>
+                                <th>📅 Nascimento</th>
+                                <th>📊 Status Acadêmico</th>
+                                <th class="text-center">⚙️ Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                var status = item.Status;
+                                var isAprovado = status == "Aprovado";
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="rounded-circle text-white d-flex align-items-center justify-content-center me-3"
+                                                 style="width: 42px; height: 42px; font-weight: bold; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);">
+                                                @item.Nome.Substring(0, 1).ToUpper()
+                                            </div>
+                                            <strong>@item.Nome</strong>
+                                        </div>
+                                    </td>
+                                    <td><code class="px-3 py-1 rounded" style="background: rgba(102, 126, 234, 0.1); color: #667eea; font-weight: 600;">@item.RA</code></td>
+                                    <td>@item.Data.ToString("dd/MM/yyyy")</td>
+                                    <td>
+                                        <span class="status-badge @(isAprovado ? "status-aprovado" : "status-reprovado")">
+                                            <span class="status-dot"></span>
+                                            @status
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-btn-group">
+                                            @Html.ActionLink("✏️", "Editar", new { id = item.Id }, new { @class = "action-btn action-btn-edit", title = "Editar aluno" })
+                                            @Html.ActionLink("👁️", "Exibir", new { id = item.Id }, new { @class = "action-btn action-btn-view", title = "Visualizar detalhes" })
+                                            @Html.ActionLink("🗑️", "Delete", new { id = item.Id }, new { @class = "action-btn action-btn-delete", title = "Excluir aluno" })
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Nome)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.RA)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Data)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RA)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Data)
-            </td>
-            <td>
-                @{
-                    var status = item.Status;
-                    var cor = status == "Aprovado" ? "#4CAF50" : "#F44336"; 
-                    var corFundo = status == "Aprovado" ? "rgba(76, 175, 80, 0.1)" : "rgba(244, 67, 54, 0.1)";
-                }
-
-                <span style="
-                display: inline-flex;
-                align-items: center;
-                padding: 4px 10px;
-                border-radius: 20px;
-                background-color: @corFundo;
-                color: @cor;
-                font-weight: 600;
-                font-size: 14px;
-                ">
-                <span style="
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                background-color: @cor;
-                margin-right: 6px;
-                "></span>
-
-                @status
-                </span>
-            </td>
-
-            <td>
-                @Html.ActionLink("Editar", "Editar", new { id = item.Id }) |
-                @Html.ActionLink("Exibir", "Exibir", new { id = item.Id }) |
-                @Html.ActionLink("Excluir", "Delete", new { id = item.Id })
-            </td>
-        </tr>
-    }
-
-</table>
+            @if (!Model.Any())
+            {
+                <div class="text-center mt-5">
+                    <div class="clean-card p-5">
+                        <div style="font-size: 4rem; opacity: 0.6;">📚</div>
+                        <h3 class="text-dark mt-3">Nenhum aluno cadastrado</h3>
+                        <p class="text-muted">Comece adicionando seu primeiro aluno ao sistema.</p>
+                        @Html.ActionLink("➕ Cadastrar Primeiro Aluno", "Create", null, new { @class = "btn-modern btn-create mt-3" })
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

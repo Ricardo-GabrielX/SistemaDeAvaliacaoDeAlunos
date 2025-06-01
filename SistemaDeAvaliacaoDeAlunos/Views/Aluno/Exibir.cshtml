@@ -1,40 +1,43 @@
-﻿<h3>Notas</h3>
+﻿<h3 class="mb-4 fw-bold">📘 Notas por Disciplina</h3>
 
-<table class="table table-bordered table-striped table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th>Disciplina</th>
-            <th>Bimestre 1</th>
-            <th>Bimestre 2</th>
-            <th>Bimestre 3</th>
-            <th>Bimestre 4</th>
-            <th>Média</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var nota in Model.Notas)
-        {
-            <tr>
-                <td><strong>@nota.Disciplina.Nome</strong></td>
-                <td>@nota.Bimestre1</td>
-                <td>@nota.Bimestre2</td>
-                <td>@nota.Bimestre3</td>
-                <td>@nota.Bimestre4</td>
-                <td>
-                    <span class="badge @(nota.Media >= 6 ? "bg-success" : "bg-danger")">
-                        @nota.Media.ToString("F2")
-                    </span>
-                </td>
+<div class="card p-3 bg-white shadow-sm rounded">
+    <table class="table table-bordered table-hover mb-0">
+        <thead class="table-light">
+            <tr class="align-middle text-center">
+                <th>📖 Disciplina</th>
+                <th>1º Bimestre</th>
+                <th>2º Bimestre</th>
+                <th>3º Bimestre</th>
+                <th>4º Bimestre</th>
+                <th>📊 Média</th>
             </tr>
-        }
-    </tbody>
-</table>
-
-<div class="alert @(Model.CalcularMedia() >= 6 ? "alert-success" : "alert-danger")" role="alert">
-    <strong>Média Geral:</strong> @Model.CalcularMedia().ToString("F2")<br />
-    <strong>Status:</strong> @Model.Status
+        </thead>
+        <tbody>
+            @foreach (var nota in Model.Notas)
+            {
+                <tr class="text-center align-middle">
+                    <td class="fw-semibold text-start">@nota.Disciplina.Nome</td>
+                    <td>@nota.Bimestre1</td>
+                    <td>@nota.Bimestre2</td>
+                    <td>@nota.Bimestre3</td>
+                    <td>@nota.Bimestre4</td>
+                    <td>
+                        <span class="badge rounded-pill px-3 py-2 @(nota.Media >= 6 ? "bg-success" : "bg-danger") text-white">
+                            @nota.Media.ToString("F2")
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
-<p>
-    @Html.ActionLink("Editar informações", "Edit", new { id = ViewBag.Id }, new { @class = "btn btn-primary" })
-</p>
+<div class="alert @(Model.CalcularMedia() >= 6 ? "alert-success" : "alert-danger") mt-4 shadow-sm rounded" role="alert">
+    <strong>📌 Média Geral:</strong> @Model.CalcularMedia().ToString("F2") <br />
+    <strong>📈 Status:</strong> @Model.Status
+</div>
+
+<div class="mt-4 d-flex flex-wrap gap-2">
+    @Html.ActionLink("✏️ Editar Informações", "Editar", new { id = ViewBag.Id }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("⬅️ Voltar para a Lista", "Listar", null, new { @class = "btn btn-outline-secondary" })
+</div>
