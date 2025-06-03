@@ -12,7 +12,6 @@
                 <h1 class="header-title">📚 Lista de Alunos</h1>
                 <div class="action-buttons">
                     @Html.ActionLink("📄 Exportar PDF", "GerarPdf", null, new { @class = "btn btn-danger", title = "Exportar como PDF" })
-                    @Html.ActionLink("📊 Exportar Excel", "GerarExcel", null, new { @class = "btn btn-success", title = "Exportar como Excel" })
                     @Html.ActionLink("➕ Novo Aluno", "Create", null, new { @class = "btn btn-primary", title = "Cadastrar novo aluno" })
                 </div>
             </div>
@@ -54,9 +53,11 @@
                                     </td>
                                     <td>
                                         <div class="action-btn-group">
-                                            @Html.ActionLink("✏️", "Editar", new { id = item.Id }, new { @class = "action-btn action-btn-edit", title = "Editar aluno" })
-                                            @Html.ActionLink("👁️", "Exibir", new { id = item.Id }, new { @class = "action-btn action-btn-view", title = "Visualizar detalhes" })
-                                            @Html.ActionLink("🗑️", "Delete", new { id = item.Id }, new { @class = "action-btn action-btn-delete", title = "Excluir aluno" })
+                                            @Html.ActionLink("✏️ Editar", "Editar", new { id = item.Id }, new { @class = "action-btn action-btn-edit", title = "Editar aluno" })
+                                            @Html.ActionLink("👁️ Visualizar", "Exibir", new { id = item.Id }, new { @class = "action-btn action-btn-view", title = "Visualizar detalhes" })
+                                            <button type="button" class="action-btn action-btn-delete btn-deletar" data-id="@item.Id" title="Excluir aluno">
+                                                🗑️ Excluir
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -80,3 +81,58 @@
         </div>
     </div>
 </div>
+
+<div id="modalConfirm" class="custom-modal-overlay d-none">
+    <div class="custom-modal">
+        <h4 class="mb-3">🗑️ Confirmar Exclusão</h4>
+        <p>Tem certeza que deseja excluir este aluno?</p>
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <button class="btn btn-secondary" id="cancelarExclusao">Cancelar</button>
+            <button class="btn btn-danger" id="confirmarExclusao">Excluir</button>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+    let idParaExcluir = null;
+
+    $(document).ready(function () {
+        $('.btn-deletar').click(function () {
+            idParaExcluir = $(this).data('id');
+            $('#modalConfirm').removeClass('d-none');
+        });
+
+        $('#cancelarExclusao').click(function () {
+            $('#modalConfirm').addClass('d-none');
+            idParaExcluir = null;
+        });
+
+        $('#confirmarExclusao').click(function () {
+            if (!idParaExcluir) return;
+
+            $.ajax({
+                url: '@Url.Action("DeleteAjax")',
+                type: 'POST',
+                data: { id: idParaExcluir },
+                success: function (res) {
+                    if (res.sucesso) {
+                        location.reload();
+                    } else {
+                        alert(res.mensagem);
+                    }
+                },
+                error: function () {
+                    alert('Erro ao tentar excluir o aluno. Tente novamente.');
+                }
+            });
+
+            $('#modalConfirm').addClass('d-none');
+        });
+    });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+}

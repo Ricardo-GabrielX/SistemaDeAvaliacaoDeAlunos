@@ -1,112 +1,77 @@
 ﻿@model WebApplication1.Models.Aluno
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Cadastrar Aluno";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
+<div class="page-container">
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                <h1 class="header-title">➕ Cadastrar Novo Aluno</h1>
+                @Html.ActionLink("↩️ Voltar à Lista", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
 
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <h4>Aluno</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="bg-dark text-light p-4 rounded-4 shadow-sm">
+                    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.Nome, new { @class = "form-label fw-bold" })
+                        @Html.TextBoxFor(m => m.Nome, new { @class = "form-control", placeholder = "Nome completo do aluno" })
+                        @Html.ValidationMessageFor(m => m.Nome, "", new { @class = "text-danger small" })
+                    </div>
+
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.RA, new { @class = "form-label fw-bold" })
+                        @Html.TextBoxFor(m => m.RA, new { @class = "form-control", placeholder = "Registro Acadêmico (RA)" })
+                        @Html.ValidationMessageFor(m => m.RA, "", new { @class = "text-danger small" })
+                    </div>
+
+                    <div class="mb-4">
+                        @Html.LabelFor(m => m.Data, new { @class = "form-label fw-bold" })
+                        @Html.TextBoxFor(m => m.Data, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                        @Html.ValidationMessageFor(m => m.Data, "", new { @class = "text-danger small" })
+                    </div>
+
+                    <h4 class="fw-semibold mb-3">📋 Notas por Disciplina</h4>
+
+                    @for (int i = 0; i < Model.Notas.Count; i++)
+                    {
+                        <div class="bg-dark rounded p-3 mb-4">
+                            <strong class="text-light">@Model.Notas[i].Disciplina.Nome</strong>
+                            @Html.Hidden($"Notas[{i}].Disciplina.Nome", Model.Notas[i].Disciplina.Nome)
+
+                            <div class="row mt-2">
+                                <div class="col-md-3">
+                                    <label class="form-label text-light">1º Bim</label>
+                                    @Html.TextBox($"Notas[{i}].Bimestre1", Model.Notas[i].Bimestre1, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label text-light">2º Bim</label>
+                                    @Html.TextBox($"Notas[{i}].Bimestre2", Model.Notas[i].Bimestre2, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label text-light">3º Bim</label>
+                                    @Html.TextBox($"Notas[{i}].Bimestre3", Model.Notas[i].Bimestre3, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label text-light">4º Bim</label>
+                                    @Html.TextBox($"Notas[{i}].Bimestre4", Model.Notas[i].Bimestre4, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="text-end mt-4">
+                        <button type="submit" class="btn-modern btn-create">💾 Salvar Aluno</button>
+                    </div>
+                </div>
+            }
         </div>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.RA, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.RA, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.RA, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Data, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Data, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Data, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <h4>Notas</h4>
-
-    @for (int i = 0; i < Model.Notas.Count; i++)
-    {
-        <div class="form-group">
-            <label>@Model.Notas[i].Disciplina.Nome</label>
-            @Html.Hidden($"Notas[{i}].Disciplina.Nome", Model.Notas[i].Disciplina.Nome)
-
-            <div class="row">
-                <div class="col-md-3">
-                    @Html.Label($"Notas[{i}].Bimestre1", "1º Bim")
-                    @Html.TextBox($"Notas[{i}].Bimestre1", Model.Notas[i].Bimestre1, new { @class = "form-control" })
-                </div>
-                <div class="col-md-3">
-                    @Html.Label($"Notas[{i}].Bimestre2", "2º Bim")
-                    @Html.TextBox($"Notas[{i}].Bimestre2", Model.Notas[i].Bimestre2, new { @class = "form-control" })
-                </div>
-                <div class="col-md-3">
-                    @Html.Label($"Notas[{i}].Bimestre3", "3º Bim")
-                    @Html.TextBox($"Notas[{i}].Bimestre3", Model.Notas[i].Bimestre3, new { @class = "form-control" })
-                </div>
-                <div class="col-md-3">
-                    @Html.Label($"Notas[{i}].Bimestre4", "4º Bim")
-                    @Html.TextBox($"Notas[{i}].Bimestre4", Model.Notas[i].Bimestre4, new { @class = "form-control" })
-                </div>
-            </div>
-        </div>
-    }
-
-    @*<h4>Notas</h4>
-
-        <div class="form-group">
-            @Html.LabelFor(m => m.Disciplina1, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-5">
-                @Html.TextBoxFor(m => m.Disciplina1, new { @class = "form-control", placeholder = "Disciplina 1" })
-            </div>
-            <div class="col-md-5">
-                @Html.TextBoxFor(m => m.Nota1, new { @class = "form-control", placeholder = "Nota 1" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(m => m.Disciplina2, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-5">
-                @Html.TextBoxFor(m => m.Disciplina2, new { @class = "form-control", placeholder = "Disciplina 2" })
-            </div>
-            <div class="col-md-5">
-                @Html.TextBoxFor(m => m.Nota2, new { @class = "form-control", placeholder = "Nota 2" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(m => m.Disciplina3, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-5">
-                @Html.TextBoxFor(m => m.Disciplina3, new { @class = "form-control", placeholder = "Disciplina 3" })
-            </div>
-            <div class="col-md-5">
-                @Html.TextBoxFor(m => m.Nota3, new { @class = "form-control", placeholder = "Nota 3" })
-            </div>
-        </div>*@
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
-        </div>
-    </div>
-</div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
 </div>
